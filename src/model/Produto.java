@@ -2,14 +2,20 @@ package model;
 
 public class Produto {
 
+    private int codigo;
     private String nome;
     private int estoque;
     private double valor;
 
-    public Produto(String nome, int estoque, double valor) {
+    public Produto(int codigo, String nome, int estoque, double valor) {
+        this.codigo = codigo;
         this.nome = nome;
         this.estoque = estoque;
         this.valor = valor;
+    }
+
+    public int getCodigo() {
+        return codigo;
     }
 
     public String getNome() {
@@ -24,12 +30,20 @@ public class Produto {
         return valor;
     }
 
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setEstoque(int estoque) {
+        this.estoque = estoque;
+    }
+
     public void adicionarEstoque(int quantidade) {
         estoque += quantidade;
     }
 
     public void removerEstoque(int quantidade) {
-        estoque = Math.max(0, estoque - quantidade);
+        estoque -= quantidade;
     }
 
     public void alterarValor(double novoValor) {
@@ -38,8 +52,9 @@ public class Produto {
 
     @Override
     public String toString() {
-        return nome +
+        return "Código: " + codigo +
+                " | Produto: " + nome +
                 " | Estoque: " + estoque +
-                " | Valor: R$" + valor;
+                " | Valor: R$ " + String.format("%.2f", valor);
     }
 }

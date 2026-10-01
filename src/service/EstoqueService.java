@@ -9,20 +9,50 @@ public class EstoqueService {
     private ArrayList<Produto> produtos;
 
     public EstoqueService() {
+
         produtos = new ArrayList<>();
 
-        produtos.add(new Produto("Caneta", 10, 2.50));
-        produtos.add(new Produto("Caderno", 15, 12.00));
-        produtos.add(new Produto("Borracha", 20, 1.50));
-        produtos.add(new Produto("Lápis", 25, 1.00));
-        produtos.add(new Produto("Apontador", 5, 3.00));
+        produtos.add(new Produto(1, "Caneta", 10, 2.50));
+        produtos.add(new Produto(2, "Caderno", 15, 12.00));
+        produtos.add(new Produto(3, "Borracha", 20, 1.50));
+        produtos.add(new Produto(4, "Lápis", 25, 1.00));
+        produtos.add(new Produto(5, "Apontador", 5, 3.00));
     }
 
-    public Produto buscarProduto(String nome) {
+    public ArrayList<Produto> listarProdutos() {
+        return produtos;
+    }
+
+    // Buscar produto pelo código ou pelo nome
+    public Produto buscarProduto(String identificador) {
+
+        // Busca pelo nome
+        for (Produto produto : produtos) {
+
+            if (produto.getNome().equalsIgnoreCase(identificador)) {
+                return produto;
+            }
+        }
+
+        // Busca pelo código
+        try {
+
+            int codigo = Integer.parseInt(identificador);
+
+            return buscarProdutoPorCodigo(codigo);
+
+        } catch (NumberFormatException e) {
+
+            return null;
+        }
+    }
+
+    // Buscar produto pelo código
+    public Produto buscarProdutoPorCodigo(int codigo) {
 
         for (Produto produto : produtos) {
 
-            if (produto.getNome().equalsIgnoreCase(nome)) {
+            if (produto.getCodigo() == codigo) {
                 return produto;
             }
         }
@@ -30,46 +60,63 @@ public class EstoqueService {
         return null;
     }
 
-    public boolean adicionarEstoque(String nome, int quantidade) {
+    // Verificar se o código já existe
+    public boolean codigoExiste(int codigo) {
 
-        Produto produto = buscarProduto(nome);
-
-        if (produto == null) {
-            return false;
-        }
-
-        produto.adicionarEstoque(quantidade);
-
-        return true;
+        return buscarProdutoPorCodigo(codigo) != null;
     }
 
-    public boolean removerEstoque(String nome, int quantidade) {
+    // Cadastrar produto
+    public void adicionarProduto(Produto produto) {
 
-        Produto produto = buscarProduto(nome);
-
-        if (produto == null) {
-            return false;
-        }
-
-        produto.removerEstoque(quantidade);
-
-        return true;
+        produtos.add(produto);
     }
 
-    public boolean alterarValor(String nome, double novoValor) {
+    // Excluir produto
+    public boolean removerProduto(String identificador) {
 
-        Produto produto = buscarProduto(nome);
+        Produto produto = buscarProduto(identificador);
 
-        if (produto == null) {
-            return false;
+        if (produto != null) {
+
+            produtos.remove(produto);
+
+            return true;
         }
 
-        produto.alterarValor(novoValor);
-
-        return true;
+        return false;
     }
 
-    public ArrayList<Produto> listarProdutos() {
-        return produtos;
+    // Adicionar estoque
+    public void adicionarEstoque(String identificador, int quantidade) {
+
+        Produto produto = buscarProduto(identificador);
+
+        if (produto != null) {
+
+            produto.adicionarEstoque(quantidade);
+        }
+    }
+
+    // Remover estoque
+    public void removerEstoque(String identificador, int quantidade) {
+
+        Produto produto = buscarProduto(identificador);
+
+        if (produto != null) {
+
+            produto.removerEstoque(quantidade);
+        }
+    }
+
+    // Alterar valor
+    public void alterarValor(String identificador, double novoValor) {
+
+        Produto produto = buscarProduto(identificador);
+
+        if (produto != null) {
+
+            produto.alterarValor(novoValor);
+        }
     }
 }
